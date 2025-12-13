@@ -1,0 +1,28 @@
+# ====================
+#  ENV FILES (VERY IMPORTANT)
+# ====================
+.env
+*.env
+.env.*
+backend/.env
+frontend/.env
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Node + React
+node_modules/
+dist/
+build/
+
+# Virtual environments
+.venv/
+venv/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+ai_analyst_mvp\backend\venv
