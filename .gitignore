@@ -2,11 +2,10 @@ C:\Users\saich\Downloads\AI_Assignment\.env
 C:\Users\saich\Downloads\AI_Assignment\venv
 venv
 pycache/
-*.pyc
-.DS_Store
-.idea/
-.vscode/
+venv/
 __pycache__/
-*.log
-*.sqlite3
-*.env
+chromadb/
+uploaded_docs/
+uploads/
+.env
+.vscode/
