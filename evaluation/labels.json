@@ -1,0 +1,12 @@
+[
+  {
+    "question": "How to start the washing machine?",
+    "answer": "Press the Power button, select the wash cycle, and press Start.",
+    "relevant_sources": ["WT7200CV_first_15_pages.pdf"]
+  },
+  {
+    "question": "What detergent should be used?",
+    "answer": "Use High-Efficiency (HE) detergent only.",
+    "relevant_sources": ["WT7200CV_first_15_pages.pdf"]
+  }
+]

@@ -1,211 +1,104 @@
-# AI_Analyst
+# GenAI Analyst - AI Document Analyst System
 
-End-to-End Retrieval-Augmented AI Analyst for Complex Documents
+This project implements an internal AI analyst system to answer complex queries on uploaded policy documents, product manuals, and financial reports. It uses modular agents orchestrated via LangChain deepagents and Azure OpenAI API, with a retrieval-augmented generation (RAG) pipeline for document ingestion and hybrid retrieval.
 
-**📌 Problem Statement**
+---
 
-This project implements an internal AI Analyst MVP for a consulting firm.
-The system enables analysts to upload large documents (policies, manuals, financial reports) and ask complex, evidence-backed questions.
+## Features
 
-The system is designed to:
+- Document Type Classification with chain-of-thought and JSON schema outputs
+- Advanced Answer Generation with citations, confidence scoring, and reasoning
+- Summarization optimized for RAG embeddings
+- RAG pipeline with semantic chunking, vector embeddings (Chroma), keyword BM25, and re-ranking
+- Multi-agent workflow with Query Analyzer, Retrieval, and Answering Agents coordinated by a Supervisor
+- Evaluation scripts to measure hallucination rate, retrieval metrics, and latency
+- Web UI for uploading documents and querying the AI analyst
+- Dockerized for easy deployment
 
-Understand different document types
+---
 
-Retrieve most relevant supporting evidence
+## Folder Structure
 
-Perform reasoning and synthesis
+genai-agent-project/
+│
+├── prompts/ # Prompt templates for classification, answer generation, summarization
+├── rag_pipeline/ # Document ingestion and retrieval logic
+├── agents/ # Deepagents for multi-agent orchestration
+├── evaluation/ # Evaluation scripts and test datasets
+├── ui/ # FastAPI web app to upload docs and ask queries
+├── Dockerfile # Containerization file
+├── requirements.txt # Python dependencies
+└── README.md # This file
 
-Produce structured, explainable outputs
+text
 
-Use a multi-agent workflow to orchestrate tools
+---
 
-Provide a usable UI for real analysts
+## Setup and Installation
 
+1. Clone the repository:
+git clone <repo-url>
+cd genai-agent-project
 
-**🧩 Architecture Overview**
+text
 
-Pipeline Flow:
+2. Set up a Python virtual environment and activate it:
+python3 -m venv venv
+source venv/bin/activate
 
-        User Uploads PDF
-                ↓
-        Semantic Ingestion & Chunking
-                ↓
-        Embedding + Metadata Storage (ChromaDB)
-                ↓
-        Query → Query Analyzer Agent
-                ↓
-        Retrieval Agent (Hybrid Search)
-                ↓
-        Answer Agent (Reasoning + Citations)
-                ↓
-        Structured JSON Response
-                ↓
-        Frontend UI Rendering
-        
+text
 
-# RAG System Implementation
+3. Install dependencies:
+pip install -r requirements.txt
 
-**A. Ingestion**
+text
 
-PDF text extraction
+4. Set environment variables for API keys (`.env` or shell):
+export AZURE_OPENAI_API_KEY="your_azure_openai_key"
+export TAVILY_API_KEY="your_tavily_key"
 
-Semantic chunking (not fixed-size)
+text
 
-Metadata preserved (source, page, section)
+5. Update deployment names and paths in the code where needed.
 
-Embeddings stored in ChromaDB
+---
 
-**B. Retrieval (Hybrid)**
+## Running the System
 
-Three-stage retrieval:
+### Start the API Server
+uvicorn ui.app:app --host 0.0.0.0 --port 8000 --reload
 
-Vector similarity (semantic)
+text
 
-BM25 keyword matching
+- Upload documents via POST `/upload_document/`
+- Ask questions via POST `/ask/`
+- Visit `http://localhost:8000` for welcome message
 
-Cross-ranking merge
+### Run Evaluation
+python evaluation/evaluation_script.py
 
-**System Outputs:**
+text
 
-Top 5 ranked chunks
+---
 
-Retrieval diagnostics
+## Module Overview
 
-Scores per strategy      
+### Prompts
+Defines task-specific prompts with chain-of-thought, JSON outputs, and fallback handling.
 
+### RAG Pipeline
+Extracts text from PDFs/text, semantically chunks, generates embeddings, stores in Chroma, and implements hybrid retrieval.
 
-# Multi-Agent Workflow
+### Agents
+GenAI analyst workflow split into Query Analyzer, Retrieval Agent, Answer Agent, coordinated by Supervisor agent using deepagents framework.
 
-Coordinates all agents and ensures task completion.
+### Evaluation
+Scripts to benchmark hallucination rate, precision/recall on retrieval, latency, and embedding quality.
 
-**Agent 1: Query Analyzer Agent**
+### UI
+Lightweight FastAPI app for document management and interactive querying.
 
-Determines user intent (factual, reasoning, comparison, multi-hop)
+---
 
-Decides retrieval strategy
 
-Rewrites queries if needed
 
-Produces execution plan
-
-
-**Agent 2: Retrieval Agent**
-
-Executes hybrid retrieval
-
-Ranks and filters chunks
-
-Surfaces contradictory evidence
-
-**Agent 3: Answer Agent**
-
-Applies Answer Generation Prompt
-
-Produces structured output
-
-Responds as a domain analyst, not a chatbot
-
-
-# 🧱 Tech Stack
-**Backend** 
-
-FastAPI (Python)
-
-Azure OpenAI API (LLM)
-
-ChromaDB (vector store)
-
-Sentence Transformers (MiniLM-L6-v2)
-
-BM25 (rank-bm25)
-
-Python-dotenv
-
-Uvicorn
-
-**Frontend** 
-
-React
-
-
-
-# 📂 Project Structure    
-
-
-      ai_analyst_mvp/
-      │
-      ├── backend/
-      │   ├── main.py
-      │   ├── agents.py
-      │   ├── retriever.py
-      │   ├── ingestion.py
-      │   ├── llm_tools.py
-      │   ├── prompts/
-      │   │   ├── classifier_prompt.txt
-      │   │   ├── answer_prompt.txt
-      │   │   ├── summarization_prompt.txt
-      │   │   └── hidden_instruction.txt
-      │   ├── .env  (NOT COMMITTED)
-      │   ├── requirements.txt
-      │   └── ...
-      │
-      ├── frontend/
-      │   ├── public/index.html
-      │   ├── src/
-      │   │   ├── App.jsx
-      │   │   ├── styles.css
-      │   │   ├── components/
-      │   │   │   ├── Upload.jsx
-      │   │   │   ├── Query.jsx
-      │   │   │   └── Results.jsx
-      │   ├── package.json
-      │
-      ├── .gitignore
-      └── README.md
-      
-
-
-# 🔐 Environment Variables
-
-Create a .env file inside /backend:
-
-          AZURE_OPENAI_ENDPOINT=https://<your-resource>.cognitiveservices.azure.com/
-          AZURE_OPENAI_API_KEY=<your-key>
-          AZURE_OPENAI_API_VERSION=2024-08-01-preview
-          AZURE_OPENAI_DEPLOYMENT=gpt-4o-mini
-
-
-
-# ⚙️ Backend Setup
-1️⃣ Activate virtual environment
-
-      cd backend
-      python3 -m venv .venv
-      source .venv/bin/activate
-
-2️⃣ Install dependencies
-
-    pip install -r requirements.txt
-
-3️⃣ Run the backend server
-
-    uvicorn main:app --reload --port 8000
-
-Backend runs at:
-
-      http://127.0.0.1:8000
-
-
-# 🌐 Frontend Setup
-1️⃣ Install packages
-
-    cd frontend
-    npm install
-
-2️⃣ Run React app
-
-    npm start
-
-Frontend runs at:
-
-    http://localhost:3000

@@ -1,0 +1,16 @@
+deepagents
+langchain-openai
+openai>=1.0.0
+chromadb
+faiss-cpu          # optional, if using faiss locally; remove if using Chroma only
+rank_bm25
+numpy
+python-dotenv
+streamlit
+fastapi
+uvicorn[standard]
+pydantic
+tqdm
+pdfplumber
+PyPDF2
+langchain-community

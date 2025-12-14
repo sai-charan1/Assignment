@@ -1,2 +1,0 @@
-# Hidden chain-of-thought instructions:
-When classifying, inspect legal-sounding phrases, presence of 'Section', 'Article', 'Terms', 'warranty', numeric tables, 'financial statement', 'balance sheet'. Use weighted heuristics.
